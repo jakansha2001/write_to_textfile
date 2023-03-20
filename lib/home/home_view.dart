@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,9 +22,20 @@ class _HomePageState extends State<HomePage> {
             controller: _textController,
           ),
           ElevatedButton(
-            onPressed: () {
-              String text = _textController.text;
-              debugPrint(text);
+            onPressed: () async {
+              try {
+                String text = _textController.text;
+                //debugPrint(text);
+                final Directory directory = await getApplicationDocumentsDirectory();
+                final File file = File('${directory.path}/my_file.txt');
+                await file.writeAsString(text);
+                String readText = await file.readAsString();
+                print(readText);
+              } catch (e) {
+                print(
+                  e.toString(),
+                );
+              }
             },
             child: const Text(
               'Print',
